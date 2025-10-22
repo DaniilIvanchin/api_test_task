@@ -1,13 +1,14 @@
-from enum import Enum
+from enum import StrEnum
 
-class DegreeEnum(str, Enum):
+
+class DegreeEnum(StrEnum):
     ASSOCIATE = "Associate"
     BACHELOR  = "Bachelor"
     MASTER    = "Master"
     DOCTORATE = "Doctorate"
 
 
-class SubjectEnum(str, Enum):
+class SubjectEnum(StrEnum):
     MATHEMATICS = "Mathematics"
     PHYSICS     = "Physics"
     HISTORY     = "History"

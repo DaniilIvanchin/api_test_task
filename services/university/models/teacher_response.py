@@ -1,4 +1,5 @@
 from services.university.models.base_teacher import BaseTeacher
 
-class TeacherRequest(BaseTeacher):
-    id:str
+
+class TeacherResponse(BaseTeacher):
+    id: int

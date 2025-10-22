@@ -1,6 +1,8 @@
 import json
+import curlify
 import requests
 from requests import Session
+from logger.logger import Logger
 from utils.json_utils import JsonUtils
 
 
@@ -8,25 +10,25 @@ def log_response(func):
     def _log_response(*args, **kwargs) -> requests.Response:
         response = func(*args, **kwargs)
 
-        print(f"\nRequest: {response.request.method} {response.request.url}")
-        if response.request.body:
-            print("Request body:", response.request.body)
+        Logger.info(f"Request: {curlify.to_curl(response.request)}")
 
-        if JsonUtils.is_json(response.text):
-            body = json.dumps(response.json(), indent=2, ensure_ascii=False)
-        else:
-            body = response.text
+        body = (
+            json.dumps(response.json(), indent=2, ensure_ascii=False)
+            if JsonUtils.is_json(response.text)
+            else response.text
+        )
 
-        print(f"\nResponse status code: {response.status_code}")
-        print(f"Response time: {response.elapsed.total_seconds()}s")
-        print(f"Response body:\n{body}\n")
+        Logger.info(
+            f"Response status code={response.status_code}, "
+            f"elapsed_time={response.elapsed.total_seconds()}s\n{body}\n"
+        )
 
         return response
+
     return _log_response
 
 
 class ApiUtils:
-
     def __init__(self, url: str, headers: dict = None):
         self.session = Session()
         self.url = url

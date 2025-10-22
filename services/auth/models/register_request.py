@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 
 class RegisterRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid", arbitrary_types_allowed=True)
+    model_config = ConfigDict(extra="forbid")
     email: str
     password: str
     password_repeat: str
