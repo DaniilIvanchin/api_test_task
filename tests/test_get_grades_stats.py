@@ -8,6 +8,7 @@ from services.university.models.teacher_request import TeacherRequest
 from services.university.models.grade_request import GradeRequest
 from services.university.models.enums import DegreeEnum, SubjectEnum
 from services.university.models.grade_constants import MAX_GRADE, MIN_GRADE
+from services.university.models.grade_stats_response import GradeStatsResponse
 
 faker = Faker()
 
@@ -15,7 +16,9 @@ faker = Faker()
 @pytest.fixture(scope="module")
 def setup_student_grades(university_api_utils_admin):
     university_service = UniversityService(university_api_utils_admin)
+
     group = university_service.create_group(GroupRequest(name=faker.word()))
+
     student = university_service.create_student(
         StudentRequest(
             first_name=faker.first_name(),
@@ -26,6 +29,7 @@ def setup_student_grades(university_api_utils_admin):
             group_id=group.id,
         )
     )
+
     teacher = university_service.create_teacher(
         TeacherRequest(
             first_name=faker.first_name(),
@@ -45,31 +49,40 @@ def setup_student_grades(university_api_utils_admin):
         )
 
     stats_response = university_service.grade_helper.get_stats(student_id=student.id)
-    assert stats_response.status_code == 200
-    stats = stats_response.json()
 
     return {
+        "service": university_service,
+        "student": student,
         "grades": grades,
-        "stats": stats
+        "stats_response": stats_response,
     }
 
 
-def test_min_grade(setup_student_grades):
+def test_get_grades_stats_contract(setup_student_grades):
+    stats_response = setup_student_grades["stats_response"]
+    assert stats_response.status_code == 200, f"Expected 200, got {stats_response.status_code}"
+    GradeStatsResponse(**stats_response.json())
+
+
+def test_min_grade_value(setup_student_grades):
     grades = setup_student_grades["grades"]
-    stats = setup_student_grades["stats"]
+    stats = GradeStatsResponse(**setup_student_grades["stats_response"].json())
+
     expected_min = min(grades)
-    assert stats["min"] == expected_min, f"Expected min={expected_min}, got {stats['min']}"
+    assert stats.min == expected_min, f"Expected min={expected_min}, got {stats.min}"
 
 
-def test_max_grade(setup_student_grades):
+def test_max_grade_value(setup_student_grades):
     grades = setup_student_grades["grades"]
-    stats = setup_student_grades["stats"]
+    stats = GradeStatsResponse(**setup_student_grades["stats_response"].json())
+
     expected_max = max(grades)
-    assert stats["max"] == expected_max, f"Expected max={expected_max}, got {stats['max']}"
+    assert stats.max == expected_max, f"Expected max={expected_max}, got {stats.max}"
 
 
-def test_avg_grade(setup_student_grades):
+def test_avg_grade_value(setup_student_grades):
     grades = setup_student_grades["grades"]
-    stats = setup_student_grades["stats"]
+    stats = GradeStatsResponse(**setup_student_grades["stats_response"].json())
+
     expected_avg = round(sum(grades) / len(grades), 2)
-    assert abs(stats["avg"] - expected_avg) < 0.01, f"Expected avg≈{expected_avg}, got {stats['avg']}"
+    assert abs(stats.avg - expected_avg) < 0.01, f"Expected avg≈{expected_avg}, got {stats.avg}"

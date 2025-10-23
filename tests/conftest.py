@@ -10,19 +10,19 @@ from services.university.university_service import UniversityService
 faker = Faker()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def auth_api_utils_anonym():
     api_utils = ApiUtils(url=AuthService.SERVICE_URL)
     return api_utils
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def university_api_utils_anonym():
     api_utils = ApiUtils(url=UniversityService.SERVICE_URL)
     return api_utils
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def access_token(auth_api_utils_anonym):
     auth_service = AuthService(auth_api_utils_anonym)
 
@@ -50,20 +50,20 @@ def access_token(auth_api_utils_anonym):
 
     return login_response.access_token
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def auth_service(auth_api_utils_anonym):
     return AuthService(auth_api_utils_anonym)
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(scope="session", autouse=True)
 def auth_api_utils_admin(access_token):
     api_utils = ApiUtils(url=AuthService.SERVICE_URL, headers={"Authorization": f"Bearer {access_token}"})
     return api_utils
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(scope="session", autouse=True)
 def university_api_utils_admin(access_token):
     api_utils = ApiUtils(url=UniversityService.SERVICE_URL, headers={"Authorization": f"Bearer {access_token}"})
     return api_utils
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def university_service(university_api_utils_anonym):
     return UniversityService(university_api_utils_anonym)
