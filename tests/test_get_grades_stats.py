@@ -12,7 +12,7 @@ from services.university.models.grade_constants import MAX_GRADE, MIN_GRADE
 faker = Faker()
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def setup_student_grades(university_api_utils_admin):
     university_service = UniversityService(university_api_utils_admin)
     group = university_service.create_group(GroupRequest(name=faker.word()))
