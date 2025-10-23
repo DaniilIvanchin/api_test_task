@@ -7,10 +7,10 @@ from services.university.models.student_request import StudentRequest
 from services.university.models.teacher_request import TeacherRequest
 from services.university.models.grade_request import GradeRequest
 from services.university.models.enums import DegreeEnum, SubjectEnum
+from services.university.models.grade_constants import MAX_GRADE, MIN_GRADE
 
 faker = Faker()
-min_grade = 1
-max_grade = 5
+
 
 class TestCreateAndAssignGrade:
     def test_create_and_assign_grade_to_student(self, university_api_utils_admin):
@@ -41,7 +41,7 @@ class TestCreateAndAssignGrade:
             json=GradeRequest(
                 teacher_id=teacher["id"],
                 student_id=student.id,
-                grade=random.randint(min_grade, max_grade)
+                grade=random.randint(MIN_GRADE, MAX_GRADE)
             ).model_dump()
         )
 

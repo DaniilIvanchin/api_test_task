@@ -34,6 +34,10 @@ class ApiUtils:
         self.url = url
         self.session.headers.update(headers or {})
 
+    def set_token(self, token: str):
+        self.session.headers["Authorization"] = f"Bearer {token}"
+
+
     @log_response
     def get(self, endpoint_url: str, **kwargs):
         return self.session.get(self.url + endpoint_url, **kwargs)

@@ -1,5 +1,5 @@
 import random
-import requests
+import pytest
 from faker import Faker
 from services.university.university_service import UniversityService
 from services.university.models.group_request import GroupRequest
@@ -7,56 +7,69 @@ from services.university.models.student_request import StudentRequest
 from services.university.models.teacher_request import TeacherRequest
 from services.university.models.grade_request import GradeRequest
 from services.university.models.enums import DegreeEnum, SubjectEnum
+from services.university.models.grade_constants import MAX_GRADE, MIN_GRADE
 
 faker = Faker()
-min_grade = 1
-max_grade = 5
 
-class TestGradesStats:
-    def test_get_grades_stats_with_data(self, university_api_utils_admin):
 
-        university_service = UniversityService(university_api_utils_admin)
+@pytest.fixture
+def setup_student_grades(university_api_utils_admin):
+    university_service = UniversityService(university_api_utils_admin)
+    group = university_service.create_group(GroupRequest(name=faker.word()))
+    student = university_service.create_student(
+        StudentRequest(
+            first_name=faker.first_name(),
+            last_name=faker.last_name(),
+            email=faker.email(),
+            degree=random.choice(list(DegreeEnum)).value,
+            phone=faker.numerify("+7##########"),
+            group_id=group.id,
+        )
+    )
+    teacher = university_service.create_teacher(
+        TeacherRequest(
+            first_name=faker.first_name(),
+            last_name=faker.last_name(),
+            subject=random.choice(list(SubjectEnum)).value,
+        )
+    )
 
-        group = university_service.create_group(GroupRequest(name=faker.word()))
-        student = university_service.create_student(
-            StudentRequest(
-                first_name=faker.first_name(),
-                last_name=faker.last_name(),
-                email=faker.email(),
-                degree=random.choice(list(DegreeEnum)).value,
-                phone=faker.numerify("+7##########"),
-                group_id=group.id,
+    grades = [random.randint(MIN_GRADE, MAX_GRADE) for _ in range(5)]
+    for g in grades:
+        university_service.create_grade(
+            GradeRequest(
+                teacher_id=teacher.id,
+                student_id=student.id,
+                grade=g,
             )
         )
 
-        teacher = university_service.create_teacher(
-            TeacherRequest(
-                first_name=faker.first_name(),
-                last_name=faker.last_name(),
-                subject=random.choice(list(SubjectEnum)).value,
-            )
-        )
+    stats_response = university_service.grade_helper.get_stats(student_id=student.id)
+    assert stats_response.status_code == 200
+    stats = stats_response.json()
 
-        grades = [random.randint(min_grade, max_grade) for _ in range(5)]
-        for g in grades:
-            university_service.create_grade(
-                GradeRequest(
-                    teacher_id=teacher.id,
-                    student_id=student.id,
-                    grade=g,
-                )
-            )
+    return {
+        "grades": grades,
+        "stats": stats
+    }
 
-        stats_response = university_service.grade_helper.get_stats(student_id=student.id)
-        assert stats_response.status_code == requests.codes.ok, (
-            f"Expected 200, got {stats_response.status_code}"
-        )
 
-        stats = stats_response.json()
-        expected_min = min(grades)
-        expected_max = max(grades)
-        expected_avg = round(sum(grades) / len(grades), 2)
+def test_min_grade(setup_student_grades):
+    grades = setup_student_grades["grades"]
+    stats = setup_student_grades["stats"]
+    expected_min = min(grades)
+    assert stats["min"] == expected_min, f"Expected min={expected_min}, got {stats['min']}"
 
-        assert stats["min"] == expected_min, f"Expected min={expected_min}, got {stats['min']}"
-        assert stats["max"] == expected_max, f"Expected max={expected_max}, got {stats['max']}"
-        assert abs(stats["avg"] - expected_avg) < 0.01, f"Expected avg≈{expected_avg}, got {stats['avg']}"
+
+def test_max_grade(setup_student_grades):
+    grades = setup_student_grades["grades"]
+    stats = setup_student_grades["stats"]
+    expected_max = max(grades)
+    assert stats["max"] == expected_max, f"Expected max={expected_max}, got {stats['max']}"
+
+
+def test_avg_grade(setup_student_grades):
+    grades = setup_student_grades["grades"]
+    stats = setup_student_grades["stats"]
+    expected_avg = round(sum(grades) / len(grades), 2)
+    assert abs(stats["avg"] - expected_avg) < 0.01, f"Expected avg≈{expected_avg}, got {stats['avg']}"
