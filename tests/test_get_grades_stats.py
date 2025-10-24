@@ -60,8 +60,8 @@ def setup_student_grades(university_api_utils_admin):
 
 def test_get_grades_stats_contract(setup_student_grades):
     stats_response = setup_student_grades["stats_response"]
-    assert stats_response.status_code == 200, f"Expected 200, got {stats_response.status_code}"
     GradeStatsResponse(**stats_response.json())
+    assert stats_response.status_code == 200, f"Expected 200, got {stats_response.status_code}"
 
 
 def test_min_grade_value(setup_student_grades):
@@ -85,4 +85,5 @@ def test_avg_grade_value(setup_student_grades):
     stats = GradeStatsResponse(**setup_student_grades["stats_response"].json())
 
     expected_avg = round(sum(grades) / len(grades), 2)
-    assert abs(stats.avg - expected_avg) < 0.01, f"Expected avg≈{expected_avg}, got {stats.avg}"
+    actual_avg = round(stats.avg, 2)
+    assert actual_avg == expected_avg, f"Expected avg={expected_avg}, got {actual_avg}"
