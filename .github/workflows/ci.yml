@@ -60,7 +60,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y allure
-          sudo ln -s /usr/share/allure/bin/allure /usr/local/bin/allure
+          if ! command -v allure &> /dev/null; then
+            BIN_PATH=$(sudo find /usr -type f -name allure -executable 2>/dev/null | head -n 1)
+            echo "Allure binary found at: $BIN_PATH"
+            sudo ln -s $BIN_PATH /usr/local/bin/allure
+          fi
           allure --version
 
       - name: Generate Allure report
@@ -71,8 +75,10 @@ jobs:
           fi
           ls -la allure-report
 
-      - name: Upload Allure report as artifact
-        uses: actions/upload-artifact@v4
+      - name: Deploy Allure report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: allure-report
-          path: ./allure-report
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          publish_branch: gh-pages
+          force_orphan: true
