@@ -58,13 +58,11 @@ jobs:
 
       - name: Install Allure CLI
         run: |
-          sudo apt-get update
-          sudo apt-get install -y allure
-          if ! command -v allure &> /dev/null; then
-            BIN_PATH=$(sudo find /usr -type f -name allure -executable 2>/dev/null | head -n 1)
-            echo "Allure binary found at: $BIN_PATH"
-            sudo ln -s $BIN_PATH /usr/local/bin/allure
-          fi
+          ALLURE_VERSION=2.27.0
+          wget -q https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.zip
+          unzip -q allure-${ALLURE_VERSION}.zip -d $HOME/allure
+          echo "$HOME/allure/allure-${ALLURE_VERSION}/bin" >> $GITHUB_PATH
+          export PATH="$HOME/allure/allure-${ALLURE_VERSION}/bin:$PATH"
           allure --version
 
       - name: Generate Allure report
