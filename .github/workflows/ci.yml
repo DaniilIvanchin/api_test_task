@@ -58,11 +58,9 @@ jobs:
 
       - name: Install Allure CLI
         run: |
-          ALLURE_VERSION=2.41.2
-          wget https://github.com/allure-framework/allure2/releases/download/$ALLURE_VERSION/allure-$ALLURE_VERSION.zip
-          unzip allure-$ALLURE_VERSION.zip -d $HOME/allure
-          echo "PATH=$HOME/allure/allure-$ALLURE_VERSION/bin:$PATH" >> $GITHUB_ENV
-          $HOME/allure/allure-$ALLURE_VERSION/bin/allure --version
+          sudo apt-get update
+          sudo apt-get install -y allure
+          allure --version
 
       - name: Generate Allure report
         run: |
