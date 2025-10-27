@@ -64,7 +64,7 @@ jobs:
           allure generate allure-results --clean -o allure-report || echo "Allure report failed"
 
       - name: Deploy Allure report to GitHub Pages
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
