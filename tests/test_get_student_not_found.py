@@ -1,4 +1,3 @@
-import pytest
 import requests
 from services.university.helpers.student_helper import StudentHelper
 
