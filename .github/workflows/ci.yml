@@ -1,8 +1,6 @@
 name: GitHub Actions Test
 
 on:
-  push:
-    branches: [ main, test-branch ]
   pull_request:
     branches: [ main, test-branch ]
 
@@ -63,8 +61,8 @@ jobs:
         run: |
           allure generate allure-results --clean -o allure-report || echo "Allure report failed"
 
-      - name: Deploy Allure report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload Allure report as artifact
+        uses: actions/upload-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./allure-report
+          name: allure-report
+          path: ./allure-report
