@@ -60,7 +60,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y allure
-          echo "/usr/share/allure/bin" >> $GITHUB_PATH
+          sudo ln -s /usr/share/allure/bin/allure /usr/local/bin/allure
           allure --version
 
       - name: Generate Allure report
