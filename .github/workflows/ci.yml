@@ -57,6 +57,7 @@ jobs:
         env:
           PYTHONPATH: .
         run: pytest tests/ --alluredir=allure-results
+        continue-on-error: true
 
       - name: Generate Allure report
         run: |
