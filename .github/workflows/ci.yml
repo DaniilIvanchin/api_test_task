@@ -54,6 +54,8 @@ jobs:
           echo "Services not responding in time" && exit 1
 
       - name: Run API tests
+        env:
+          PYTHONPATH: .
         run: pytest tests/ --alluredir=allure-results
 
       - name: Generate Allure report
