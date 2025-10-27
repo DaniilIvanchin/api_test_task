@@ -7,3 +7,4 @@ allure-pytest
 requests
 faker
 docker
+curlify
