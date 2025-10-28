@@ -14,13 +14,12 @@ jobs:
         with:
           python-version: 3.11
       - run: |
-          pip install -r requirements.txt
+          pip install ruff
           ruff check .
 
   test:
     runs-on: ubuntu-latest
     needs: lint
-
     env:
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
@@ -40,17 +39,6 @@ jobs:
       - run: |
           pip install -r requirements.txt
           docker compose up -d --build
-          
-          echo "Waiting for services to start"
-          for i in {1..30}; do
-            if curl -s http://localhost:8000/health > /dev/null && curl -s http://localhost:8001/health > /dev/null; then
-              echo "Services are ready"
-              break
-            fi
-            sleep 5
-          done
-          
-          echo "Running tests"
           pytest --alluredir=allure-results || true
         continue-on-error: true
 
@@ -60,6 +48,10 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v4
+      - name: Generate Allure Report
+        run: |
+          mkdir -p allure-report
+          allure generate allure-results --clean -o allure-report
       - name: Publish Allure Report
         uses: peaceiris/actions-gh-pages@v3
         with:
