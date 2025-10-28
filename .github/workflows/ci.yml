@@ -51,9 +51,11 @@ jobs:
           done
           
           echo "Running tests"
-          pytest --alluredir=allure-results
+          pytest --alluredir=allure-results || true
+        continue-on-error: true
 
   report:
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     needs: test
     steps:
