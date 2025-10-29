@@ -39,6 +39,7 @@ jobs:
       - run: |
           pip install -r requirements.txt
           docker compose up -d --build
+          mkdir -p allure-results
           pytest --alluredir=allure-results || true
         continue-on-error: true
 
@@ -62,7 +63,9 @@ jobs:
         run: |
           mkdir -p allure-report
           if [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
+            echo "Generating Allure report"
             allure generate allure-results --clean -o allure-report
+          else
           fi
           ls -la allure-report
 
