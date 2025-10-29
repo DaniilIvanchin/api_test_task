@@ -1,0 +1,6 @@
+[2025-10-29 07:08:18,400] [INFO] - Request: curl -H 'User-Agent: python-requests/2.32.5' -H 'Accept-Encoding: gzip, deflate' -H 'Accept: */*' -H 'Connection: keep-alive' -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoidHRheWxvciIsImV4cCI6MTc2MTcyODg5NywiaWF0IjoxNzYxNzIxNjk3fQ.QzOT-OBXLWyKrVCfS5y-ogcAMsee4TGK8RzfxS4CDGhpkW1XSo0kzpi56UxFj3Qke0oAyIx4ZEttmSvy8LU4UFyTx8mz0qdl0ZuQXRvPTfEar7dIHXfkxsc0s_Wmfyk0WJJzQJtkjJlVjf-M1UgHcLeEV-sLUrmxyzeNT6v8FjEpKF3fj7LUgQPfcsp2afwSgIqmw88Fxd_DhfCW8cAwk_MkHRl6fFRhX6kp3ALp3CNZ1FlqlxzFbGFc93z7UOlusw8uiT0jJh3UlvlxlvZHgGI6cS3EBLXy2PgoxLFdGe-jqg4nJ94DXZumhtJsnncu6KLVyffQlSIfCVy7xqTOpw' http://localhost:8001/students/99999/
+[2025-10-29 07:08:18,400] [INFO] - Response status code=404, elapsed_time=0.007448s
+{
+  "detail": "Student not found"
+}
+

@@ -1,0 +1,6 @@
+[2025-10-29 07:08:17,683] [INFO] - Request: curl -H 'User-Agent: python-requests/2.32.5' -H 'Accept-Encoding: gzip, deflate' -H 'Accept: */*' -H 'Connection: keep-alive' -H 'Content-Length: 16' -H 'Content-Type: application/json' -d '{"name": "home"}' http://localhost:8001/groups/
+[2025-10-29 07:08:17,683] [INFO] - Response status code=403, elapsed_time=0.002448s
+{
+  "detail": "Access denied"
+}
+

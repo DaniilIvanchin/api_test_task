@@ -1,0 +1,26 @@
+[2025-10-29 07:08:17,833] [INFO] - Request: curl -H 'User-Agent: python-requests/2.32.5' -H 'Accept-Encoding: gzip, deflate' -H 'Accept: */*' -H 'Connection: keep-alive' -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoidHRheWxvciIsImV4cCI6MTc2MTcyODg5NywiaWF0IjoxNzYxNzIxNjk3fQ.QzOT-OBXLWyKrVCfS5y-ogcAMsee4TGK8RzfxS4CDGhpkW1XSo0kzpi56UxFj3Qke0oAyIx4ZEttmSvy8LU4UFyTx8mz0qdl0ZuQXRvPTfEar7dIHXfkxsc0s_Wmfyk0WJJzQJtkjJlVjf-M1UgHcLeEV-sLUrmxyzeNT6v8FjEpKF3fj7LUgQPfcsp2afwSgIqmw88Fxd_DhfCW8cAwk_MkHRl6fFRhX6kp3ALp3CNZ1FlqlxzFbGFc93z7UOlusw8uiT0jJh3UlvlxlvZHgGI6cS3EBLXy2PgoxLFdGe-jqg4nJ94DXZumhtJsnncu6KLVyffQlSIfCVy7xqTOpw' -H 'Content-Length: 19' -H 'Content-Type: application/json' -d '{"name": "kitchen"}' http://localhost:8001/groups/
+[2025-10-29 07:08:17,833] [INFO] - Response status code=201, elapsed_time=0.009388s
+{
+  "name": "kitchen",
+  "id": 3
+}
+
+[2025-10-29 07:08:17,881] [INFO] - Request: curl -H 'User-Agent: python-requests/2.32.5' -H 'Accept-Encoding: gzip, deflate' -H 'Accept: */*' -H 'Connection: keep-alive' -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoidHRheWxvciIsImV4cCI6MTc2MTcyODg5NywiaWF0IjoxNzYxNzIxNjk3fQ.QzOT-OBXLWyKrVCfS5y-ogcAMsee4TGK8RzfxS4CDGhpkW1XSo0kzpi56UxFj3Qke0oAyIx4ZEttmSvy8LU4UFyTx8mz0qdl0ZuQXRvPTfEar7dIHXfkxsc0s_Wmfyk0WJJzQJtkjJlVjf-M1UgHcLeEV-sLUrmxyzeNT6v8FjEpKF3fj7LUgQPfcsp2afwSgIqmw88Fxd_DhfCW8cAwk_MkHRl6fFRhX6kp3ALp3CNZ1FlqlxzFbGFc93z7UOlusw8uiT0jJh3UlvlxlvZHgGI6cS3EBLXy2PgoxLFdGe-jqg4nJ94DXZumhtJsnncu6KLVyffQlSIfCVy7xqTOpw' -H 'Content-Length: 135' -H 'Content-Type: application/json' -d '{"first_name": "Daniel", "last_name": "Hartman", "email": "not-an-email", "degree": "Bachelor", "phone": "+72170851117", "group_id": 3}' http://localhost:8001/students/
+[2025-10-29 07:08:17,881] [INFO] - Response status code=422, elapsed_time=0.006123s
+{
+  "detail": [
+    {
+      "type": "value_error",
+      "loc": [
+        "body",
+        "email"
+      ],
+      "msg": "value is not a valid email address: An email address must have an @-sign.",
+      "input": "not-an-email",
+      "ctx": {
+        "reason": "An email address must have an @-sign."
+      }
+    }
+  ]
+}
+
