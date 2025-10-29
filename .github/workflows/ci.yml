@@ -63,9 +63,11 @@ jobs:
         run: |
           mkdir -p allure-report
           if [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
-            echo "Generating Allure report"
+            echo "Generating Allure report..."
             allure generate allure-results --clean -o allure-report
           else
+            echo "Allure results not found. Creating fallback index.html"
+            echo "<html><body><h2 style='font-family:sans-serif;'>Allure results not found</h2><p>No tests were run or no results were generated.</p></body></html>" > allure-report/index.html
           fi
           ls -la allure-report
 
