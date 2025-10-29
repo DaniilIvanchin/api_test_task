@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pytest
+pytest-asyncio
+ruff
+allure-pytest
+requests
+faker
+docker
+curlify

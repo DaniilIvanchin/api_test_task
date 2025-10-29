@@ -1,0 +1,12 @@
+import requests
+from services.general.helpers.base_helper import BaseHelper
+
+
+class GroupHelper(BaseHelper):
+    ENDPOINT_PREFIX = "/groups"
+
+    def post_group(self, json: dict) -> requests.Response:
+        return self.api_utils.post(f"{self.ENDPOINT_PREFIX}/", json=json)
+
+    def get_groups(self) -> requests.Response:
+        return self.api_utils.get(f"{self.ENDPOINT_PREFIX}/")
